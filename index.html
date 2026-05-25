@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teman Nonton Netflix-mu 🍿</title>
+    <!-- Mengambil font cantik dari Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Desain dasar halaman bernuansa cozy */
+        body {
+            background-color: #141414; /* Warna gelap khas Netflix */
+            background-image: radial-gradient(rgba(229, 9, 20, 0.15) 1px, transparent 1px);
+            background-size: 24px 24px;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Container untuk hujan ikon di background */
+        #particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Kotak putih/gelap transparan di tengah */
+        .container {
+            background: rgba(30, 30, 30, 0.9);
+            border: 2px solid #e50914; /* Merah khas Netflix */
+            padding: 40px 30px;
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(229, 9, 20, 0.3);
+            max-width: 420px;
+            width: 85%;
+            z-index: 10;
+            position: relative;
+            backdrop-filter: blur(8px);
+            transition: all 0.5s ease;
+        }
+
+        h1 {
+            color: #e50914;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 28px;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(229, 9, 20, 0.5);
+        }
+
+        p {
+            color: #f5f5f1;
+            font-size: 16px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        /* Area tombol */
+        .btn-group {
+            position: relative;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        button {
+            padding: 12px 25px;
+            font-size: 15px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        /* Desain tombol "Yes" bernuansa Netflix */
+        #btn-yes {
+            background: linear-gradient(45deg, #e50914, #ff3838);
+            color: white;
+            z-index: 2;
+        }
+
+        #btn-yes:hover {
+            transform: scale(1.08);
+            box-shadow: 0 8px 25px rgba(229, 9, 20, 0.6);
+        }
+
+        /* Desain tombol "No" */
+        #btn-no {
+            background-color: #2f2f2f;
+            color: #bbb;
+            border: 1px solid #444;
+            z-index: 20;
+        }
+
+        /* Animasi Popcorn Mengambang */
+        .popcorn-box {
+            font-size: 80px;
+            margin-bottom: 10px;
+            display: inline-block;
+            animation: float 2.5s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(4deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        /* Animasi Ikan/Kado/Popcorn Jatuh */
+        .falling-item {
+            position: absolute;
+            top: -50px;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-50px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Pesan kejutan */
+        .hidden-message {
+            display: none;
+            animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .hidden-message h2 {
+            color: #ffffff;
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        /* Kotak Kutipan / Quote Box */
+        .quote-box {
+            background: rgba(229, 9, 20, 0.1);
+            border-left: 4px solid #e50914;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            color: #fff;
+            font-style: italic;
+            font-size: 15px;
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: switchQuote 0.5s ease;
+        }
+
+        @keyframes switchQuote {
+            0% { opacity: 0; transform: translateY(5px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .btn-next {
+            background-color: #ffffff;
+            color: #141414;
+            font-size: 14px;
+            padding: 10px 20px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .btn-next:hover {
+            background-color: #e50914;
+            color: #ffffff;
+        }
+
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Tombol Musik Melayang */
+        .music-btn {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: rgba(229, 9, 20, 0.8);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 100;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            display: none; /* Disembunyikan sampai tombol Yes diklik */
+            align-items: center;
+            justify-content: center;
+            animation: floatMusic 3s ease-in-out infinite;
+        }
+
+        @keyframes floatMusic {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Audio Player (Lagu Romantis) -->
+    <!-- Saya menggunakan instrumen piano romantis sebagai default -->
+    <audio id="bg-music" loop>
+        <source src="lagu.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Tombol untuk pause/play musik -->
+    <button class="music-btn" id="music-toggle" onclick="toggleMusic()">🎵</button>
+
+    <!-- Area untuk partikel berjatuhan -->
+    <div id="particles"></div>
+
+    <div class="container" id="main-container">
+        <!-- Bagian Awal (Pertanyaan) -->
+        <div id="awal">
+            <h1>Ciee, Netflix-an! 🍿</h1>
+            <p>Katanya ada yang mau marathon film hari ini... Tapi, kamu kangen aku dulu nggak sebelum nonton?</p>
+            
+            <div class="btn-group">
+                <button id="btn-yes" onclick="terimaKasih()">Kangen Banget!</button>
+                <button id="btn-no" onmouseover="kabur()" ontouchstart="kabur()">Nggak tuh</button>
+            </div>
+        </div>
+
+        <!-- Bagian Kejutan Netflix (Awalnya tersembunyi) -->
+        <div id="pesan" class="hidden-message">
+            <div class="popcorn-box">🍿🥤🎬</div>
+            <h2>Yeayyy! Selamat Menonton! 🥰</h2>
+            <p style="margin-bottom: 10px;">Aku ada kata kata buat kamu sayang:</p>
+            
+            <!-- Tempat kata-kata acak muncul -->
+            <div class="quote-box" id="quote-display">
+                Loading kuota kemesraan...
+            </div>
+
+            <button class="btn-next" onclick="gantiKata()">Klik buat dapet kata lain! 💌</button>
+        </div>
+    </div>
+
+    <script>
+        const btnNo = document.getElementById('btn-no');
+
+        // Daftar kata-kata semangat nonton Netflix yang lucu & bucin
+        const kataNetflix = [
+            "Selamat menonton Netflix, Sayang! Jangan lupa siapin camilan kesukaanmu ya. Walau nontonnya kepisah jarak, hatiku tetap nonton bareng kamu! 🍿🎬",
+            "Met nonton Netflix kesayanganku! Kurangi begadang ya, nanti matanya panda kayak aku. Tetap manis dan love you! 🐼💖",
+            "Selamat nonton, Pacar Hebatku! Nikmati me-time kamu hari ini ya, kamu layak banget dapet istirahat yang nyaman hari ini. 🛋️✨",
+            "Nontonnya jangan tegang-tegang ya! Anggap aja aku lagi meluk kamu erat dari samping pas bagian filmnya mulai seru. 🤗📺",
+            "Semangat nonton Netflix-nya! Kalau filmnya bagus, nanti ceritain detailnya ke aku ya. Kalau bosen, kabari aku biar aku yang ngehibur kamu. 📲🤍",
+            "Selamat bersenang-senang di dunia film, Cantik! Tapi ingat ya, sekeren-kerennya aktor di layar kacamu, tetep aku kan pemenang di hatimu? 😎😜",
+        ];
+
+        let quoteIndex = 0;
+
+        // Fungsi membuat tombol "Nggak" kabur
+        function kabur() {
+            const maxX = window.innerWidth - btnNo.offsetWidth - 20;
+            const maxY = window.innerHeight - btnNo.offsetHeight - 20;
+            
+            const randomX = Math.floor(Math.random() * maxX);
+            const randomY = Math.floor(Math.random() * maxY);
+            
+            btnNo.style.position = 'fixed';
+            btnNo.style.left = randomX + 'px';
+            btnNo.style.top = randomY + 'px';
+        }
+
+        // Transisi setelah menekan tombol "Kangen Banget!"
+        function terimaKasih() {
+            document.getElementById('awal').style.display = 'none';
+            document.getElementById('pesan').style.display = 'block';
+            
+            // Ganti warna background container agar lebih elegan saat sukses
+            document.getElementById('main-container').style.borderColor = '#ff3838';
+            
+            // Tampilkan kata pertama
+            gantiKata();
+            
+            // Mulai hujan dekorasi nonton
+            mulaiHujanDekorasi();
+
+            // Mainkan Lagu
+            const music = document.getElementById('bg-music');
+            music.volume = 0.6; // Mengatur volume lagu (0.0 sampai 1.0)
+            music.play();
+            
+            // Tampilkan tombol musik di pojok kanan bawah
+            const musicBtn = document.getElementById('music-toggle');
+            musicBtn.style.display = 'flex';
+        }
+
+        // Fungsi untuk menyalakan atau mematikan musik
+        function toggleMusic() {
+            const music = document.getElementById('bg-music');
+            const btn = document.getElementById('music-toggle');
+            
+            if (music.paused) {
+                music.play();
+                btn.innerText = '🎵'; // Ubah ikon jika play
+            } else {
+                music.pause();
+                btn.innerText = '🔇'; // Ubah ikon jika pause
+            }
+        }
+
+        // Fungsi mengacak kata-kata semangat
+        function gantiKata() {
+            const display = document.getElementById('quote-display');
+            
+            // Mencegah animasi macet dengan me-restart class animasinya
+            display.style.animation = 'none';
+            display.offsetHeight; // memicu reflow
+            display.style.animation = 'switchQuote 0.5s ease';
+
+            // Ambil kata acak tanpa duplikasi langsung
+            let newIndex = Math.floor(Math.random() * kataNetflix.length);
+            while (newIndex === quoteIndex) {
+                newIndex = Math.floor(Math.random() * kataNetflix.length);
+            }
+            quoteIndex = newIndex;
+            
+            display.innerText = kataNetflix[quoteIndex];
+        }
+
+        // Membuat hujan ornamen bertema nonton dan cinta
+        function mulaiHujanDekorasi() {
+            const container = document.getElementById('particles');
+            const emojis = ['🍿', '🥤', '🎬', '📺', '💖', '✨', '🌹', '❤️', '🔥'];
+
+            setInterval(() => {
+                const item = document.createElement('div');
+                item.classList.add('falling-item');
+                
+                item.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+                
+                const size = Math.random() * 20 + 20;
+                item.style.fontSize = size + 'px';
+                item.style.left = Math.random() * 100 + 'vw';
+                item.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                
+                container.appendChild(item);
+                
+                setTimeout(() => {
+                    item.remove();
+                }, 6000);
+            }, 180);
+        }
+    </script>
+</body>
+</html>
